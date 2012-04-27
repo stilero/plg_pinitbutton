@@ -38,8 +38,8 @@ jimport('joomla.plugin.plugin');
 
 class plgContentPinitbutton extends JPlugin {
 
-    var $config;
-    var $errorOccured;
+   var $config;
+    var $Article;
 
     function plgContentPinitbutton(&$subject, $config) {
         parent::__construct($subject, $config);
@@ -52,19 +52,7 @@ class plgContentPinitbutton extends JPlugin {
         );
     }
 
-    // ---------- Joomla 1.6+ methods ------------------
-
-    /**
-     * Method is called before the content is deleted
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $data       Data relating to the content deleted
-     * @return boolean
-     * @since 1.6
-     */
-    public function onContentAfterDelete($context, $data) {
-        return true;
-    }
+     // ---------- Joomla 1.6+ methods ------------------
 
     /**
      * Method is called by the view and the results are imploded and displayed in a placeholder
@@ -77,46 +65,10 @@ class plgContentPinitbutton extends JPlugin {
      * @since 1.6
      */
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
-        return '';
-    }
-
-    /**
-     * Method is called right after the content is saved
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    JTableContent object
-     * @var bool    $isNew      If the content is just about to be created
-     * @return void
-     * @since 1.6
-     */
-    public function onContentAfterSave($context, &$article, $isNew) {
-        
-    }
-
-    /**
-     * Method is called by the view and the results are imploded and displayed in a placeholder
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    content object. Note $article->text is also available
-     * @var object  $params     content params
-     * @var integer $limitstart The 'page' number
-     * @return String
-     * @since 1.6
-     */
-    public function onContentAfterTitle($context, &$article, &$params, $limitstart=0) {
-        return '';
-    }
-
-    /**
-     * Method is called before the content is deleted
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $data       Data relating to the content deleted
-     * @return boolean
-     * @since 1.6
-     */
-    public function onContentBeforeDelete($context, $data) {
-        return true;
+        if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
+            return '';
+        }
+        return $this->buttonScript();
     }
 
     /**
@@ -130,33 +82,10 @@ class plgContentPinitbutton extends JPlugin {
      * @since 1.6
      */
     public function onContentBeforeDisplay($context, &$article, &$params, $limitstart=0) {
-        return '';
-    }
-
-    /**
-     * Method is called right after the content is saved
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    JTableContent object
-     * @var bool    $isNew      If the content is just about to be created
-     * @return boolean          If false, abort the save
-     * @since 1.6
-     */
-    public function onContentBeforeSave($context, &$article, $isNew) {
-        return true;
-    }
-
-    /**
-     * Called after Change state initiated
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var array   $pks        A list of primary key ids of the content that has changed state.
-     * @var integer $value      The value of the state that the content has been changed to.
-     * @return boolean
-     * @since 1.6
-     */
-    public function onContentChangeState($context, $pks, $value) {
-        return true;
+        if($this->params->def('placement')!='1' || !$this->isArticleContext() ){
+            return '';
+        }
+        return $this->buttonScript();
     }
 
     /**
@@ -170,36 +99,18 @@ class plgContentPinitbutton extends JPlugin {
      * @since 1.6
      */
     public function onContentPrepare($context, &$article, &$params, $limitstart=0) {
-        
+        JLoader::register( 'jArticle', dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+        if($context!='com_content.article'){
+            return;
+        }
+        $articleFactory = new jArticle($article);
+        $this->Article = $articleFactory->getArticleObj();
+        $this->insertButtonScriptDeclaration();
+        $regex = '/{pinitbtn}/i';
+        preg_replace($regex, $this->buttonScript(), $article->text);
     }
 
     // ---------- Joomla 1.5 methods ------------------
-
-    /**
-     * Method is called right before the content is saved
-     *
-     * @var object  $article    Reference to JTableContent object
-     * @var bool    $isNew      If the content is just about to be created
-     * @return boolean          If false, abort the save
-     * @since 1.5
-     */
-    public function onBeforeContentSave(&$article, $isNew) {
-        global $mainframe;
-        return true;
-    }
-
-    /**
-     * Method is called right after the content is saved
-     *
-     * @var object  $article    Reference to JTableContent object
-     * @var bool    $isNew      If the content is just about to be created
-     * @return boolean          If false, abort the save
-     * @since 1.5
-     */
-    public function onAfterContentSave(&$article, $isNew) {
-        global $mainframe;
-        return true;
-    }
 
     /**
      * The first stage in preparing content for output and is the most common point for content orientated plugins to do their work.
@@ -212,20 +123,12 @@ class plgContentPinitbutton extends JPlugin {
      */
     public function onPrepareContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
-    }
-
-    /**
-     * This is a request for information that should be placed between the content title and the content body.
-     *
-     * @var object  $article    A reference to the article that is being rendered by the view.
-     * @var array   $params     A reference to an associative array of relevant parameters.
-     * @var integer $limitstart An integer that determines the "page" of the content that is to be generated.
-     * @return string           Returned value from this event will be displayed in a placeholder.
-     * @since 1.5
-     */
-    public function onAfterDisplayTitle(&$article, &$params, $limitstart=0) {
-        global $mainframe;
-        return '';
+        JLoader::register( 'jArticle', dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+        $articleFactory = new jArticle($article);
+        $this->Article = $articleFactory->getArticleObj();
+        $this->insertButtonScriptDeclaration();
+        $regex = '/{pinitbtn}/i';
+        preg_replace($regex, $this->buttonScript(), $article->text);
     }
 
     /**
@@ -239,7 +142,10 @@ class plgContentPinitbutton extends JPlugin {
      */
     public function onBeforeDisplayContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
-        return '';
+        if( $this->params->def('placement')!='1' || !$this->isArticleContext() ){
+            return '';
+        }
+        return $this->buttonScript();
     }
 
     /**
@@ -253,7 +159,148 @@ class plgContentPinitbutton extends JPlugin {
      */
     public function onAfterDisplayContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
-        return '';
+        if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
+            return '';
+        }
+        return $this->buttonScript();
+    }
+    
+    private function isArticleContext(){
+        $articleID = JRequest::getVar('id');
+        $isArticle = isset ($articleID) ? true : false;
+        return $isArticle;
+    }
+    
+    private function layoutAsAttr(){
+        $layout = '';
+        switch ($this->params->def('pincount')) {
+            case 1:
+                $layout = ' count-layout="horizontal"';
+                break;
+            case 2:
+                $layout = ' count-layout="vertical"';
+                break;
+            default:
+                $layout = ' count-layout="none"';
+                break;
+        }
+        return $layout;
+    }
+    
+    private function buttonImage(){
+        $layout = '';
+        switch ($this->params->def('image')) {
+            case 1:
+                $layout = '//assets.pinterest.com/images/PinExt.png';
+                break;
+            case 2:
+                $layout = 'http://passets-cdn.pinterest.com/images/about/buttons/big-p-button.png';
+                break;
+            case 3:
+                $layout = 'http://passets-cdn.pinterest.com/images/about/buttons/pinterest-button.png';
+                break;
+            default:
+                $layout = '//assets.pinterest.com/images/PinExt.png';
+                break;
+        }
+        return $layout;
+    }
+    
+    private function buttonScript(){
+        $url = htmlentities($this->Article->url);
+        $imageurl = htmlentities($this->findBestImage());
+        $desc = htmlentities($this->description());
+        $buttonImg = $this->buttonImage();
+        $layout = $this->layoutAsAttr();
+        $buttonScript = '<a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a>';
+        return $buttonScript;
+    }
+    
+    public function insertButtonScriptDeclaration(){
+        $document = JFactory::getDocument();
+        $document->addScript('//assets.pinterest.com/js/pinit.js');
+    }
+    
+    private function description(){
+        $desc = '';
+        switch ($this->params->def('og-desc')) {
+            case 1:
+                $desc = htmlentities(strip_tags($this->Article->metadesc));
+                break;
+            case 2:
+                $desc = htmlentities(strip_tags($this->Article->introtext));
+                break;
+            case 3:
+                $joomlaConfig = JFactory::getConfig();
+                $joomlaSiteName = $joomlaConfig->getValue( 'config.MetaDesc' );
+                $desc = htmlentities(strip_tags($joomlaSiteName));
+                break;
+            case 4:
+                $desc = htmlentities(strip_tags($this->params->def('og-desc-custom')));
+                break;
+            default:
+                break;
+        }
+        $desc = $desc=='' ? htmlentities(strip_tags($this->params->def('og-desc-custom'))) : $desc;
+        return $desc;
+    }
+    
+    private function findBestImage(){
+        $image = $this->image($this->params->def('og-img-prio1'));
+        if($image == "" ){
+            $image = $this->image($this->params->def('og-img-prio2'));
+        }
+        if($image == "" ){
+            $image = $this->image($this->params->def('og-img-prio3'));
+        }
+        if($image != ""){
+            return htmlentities(strip_tags($image));
+        }
+    }
+    
+    private function image($option){
+        $image = '';
+        switch ($option) {
+            case 1:
+                $image = (isset($this->Article->firstContentImage)) ? $this->Article->firstContentImage : '';
+                break;
+            case 2:
+                $image = (isset($this->Article->introImage)) ? $this->Article->introImage : '';
+                break;
+            case 3:
+                $image = (isset($this->Article->fullTextImage)) ? $this->Article->fullTextImage : '';
+                break;
+            case 4:
+                $images = (!empty($this->Article->imageArray)) ? $this->Article->imageArray : null;
+                $cssClass = $this->params->def('og-img-class');
+                $classImage = $this->imageWithClass($images, $cssClass);
+                $image = (isset($classImage)) ? $classImage : '';
+                break;
+            case 5:
+                if($this->params->def('og-img-custom') != ''){
+                    $image = 'images/'.$this->params->def('og-img-custom');
+                }
+                break;
+            default:
+                return;
+                break;
+        }
+        $image = $image == '' ? 'images/'.$this->params->def('og-img-custom') : $image;
+        if($image != ""){
+            $image = preg_match('/http/', $image)? $image : JURI::root().$image;
+            return $image;
+        }
+    }
+    
+    private function imageWithClass($images, $cssClass){
+        if( (!isset($images)) || (empty ($images))  ){
+            return;
+        }
+        foreach ($images as $image) {
+            if($image['class'] == $cssClass){
+                return $image['src'];
+            }
+        }
     }
 
 }

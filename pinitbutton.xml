@@ -8,7 +8,7 @@
     <authorUrl>www.stilero.com</authorUrl>
     <version>1.0</version>
     <license>GPLv2</license>
-    <description>Adds a Pinterest button to your website</description>
+    <description>Adds a Pinterest button to your website.</description>
     <files>
         <filename plugin="pinterestbutton">pinterestbutton.php</filename>
         <filename folder="pinterestclasses">pinterestclasses/jArticle.php</filename>
