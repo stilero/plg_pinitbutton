@@ -10,120 +10,122 @@
     <license>GPLv2</license>
     <description>Adds a Pinterest button to your website</description>
     <files>
-        <filename plugin="pinterestbutton">pinterestbutton.php</filename>
+        <filename plugin="pinitbutton">pinitbutton.php</filename>
         <filename folder="pinterestclasses">pinterestclasses/jArticle.php</filename>
         <filename folder="pinterestclasses">pinterestclasses/index.html</filename>
     </files>
     <languages folder="language">
-        <language tag="en-GB">en-GB.plg_content_pinterestbutton.ini</language>
-        <language tag="sv-SE">sv-SE.plg_content_pinterestbutton.ini</language>
+        <language tag="en-GB">en-GB.plg_content_pinitbutton.ini</language>
+        <language tag="sv-SE">sv-SE.plg_content_pinitbutton.ini</language>
     </languages>
     <!-- Standard plugin parameters for Joomla! 1.5 -->   
     <params>
-        <param name="placement" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_PLACEMENT" description="PLG_CONTENT_PINTERESTBUTTON_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_BEFORE_CONTENT</option>
-            <option value="2">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_AFTER_CONTENT</option>
-            <option value="0">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_NONE</option>
+        <param name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_PLACEMENT_BEFORE_CONTENT</option>
+            <option value="2">PLG_CONTENT_PINITBUTTON_PLACEMENT_AFTER_CONTENT</option>
+            <option value="0">PLG_CONTENT_PINITBUTTON_PLACEMENT_NONE</option>
         </param>
-        <param name="image" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_IMAGE" description="PLG_CONTENT_PINTERESTBUTTON_IMAGE_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_IMAGE_DEFAULT</option>
-            <option value="0">PLG_CONTENT_PINTERESTBUTTON_IMAGE_BIG</option>
+        <param name="image" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_IMAGE" description="PLG_CONTENT_PINITBUTTON_IMAGE_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_IMAGE_DEFAULT</option>
+            <option value="0">PLG_CONTENT_PINITBUTTON_IMAGE_BIG</option>
         </param>   
-        <param name="pincount" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_PINCOUNT" description="PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_HORISONTAL</option>
-            <option value="2">PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_VERTICAL</option>
-            <option value="0">PLG_CONTENT_PINTERESTBUTTON_NO_COUNT</option>
+        <param name="pincount" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PINCOUNT" description="PLG_CONTENT_PINITBUTTON_PINCOUNT_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_PINCOUNT_HORISONTAL</option>
+            <option value="2">PLG_CONTENT_PINITBUTTON_PINCOUNT_VERTICAL</option>
+            <option value="0">PLG_CONTENT_PINITBUTTON_NO_COUNT</option>
         </param>   
-        <param type="spacer" default="PLG_CONTENT_PINTERESTBUTTON_OG_IMAGE_PRIO" />
-        <param name="og-img-prio1" type="list" default="4" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO1" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO1_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-            <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-            <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+        <param type="spacer" default="PLG_CONTENT_PINITBUTTON_OG_IMAGE_PRIO" />
+        <param name="og-img-prio1" type="list" default="4" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO1" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO1_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+            <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+            <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
             <option value="0">Off</option>
         </param>
-        <param name="og-img-prio2" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO2" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO2_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-            <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-            <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+        <param name="og-img-prio2" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO2" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO2_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+            <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+            <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
             <option value="0">Off</option>
         </param>
-        <param name="og-img-prio3" type="list" default="5" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO3_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-            <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-            <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+        <param name="og-img-prio3" type="list" default="5" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+            <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+            <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
             <option value="0">Off</option>
         </param>
-        <param name="og-desc" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_OGDESC" description="PLG_CONTENT_PINTERESTBUTTON_OGDESC_DESC">
-            <option value="1">PLG_CONTENT_PINTERESTBUTTON_ARTICLE_METADESC</option>
-            <option value="2">PLG_CONTENT_PINTERESTBUTTON_ARTICLE_INTROTEXT</option>
-            <option value="3">PLG_CONTENT_PINTERESTBUTTON_SITE_DESC</option>
-            <option value="4">PLG_CONTENT_PINTERESTBUTTON_CUSTOMDESC</option>
+        <param name="og-img-class" type="text"  default="pinitimage" label="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS_DESC"/>
+        <param name="og-img-custom" type="imagelist" directory="images/stories" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
+        <param name="og-desc" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGDESC" description="PLG_CONTENT_PINITBUTTON_OGDESC_DESC">
+            <option value="1">PLG_CONTENT_PINITBUTTON_ARTICLE_METADESC</option>
+            <option value="2">PLG_CONTENT_PINITBUTTON_ARTICLE_INTROTEXT</option>
+            <option value="3">PLG_CONTENT_PINITBUTTON_SITE_DESC</option>
+            <option value="4">PLG_CONTENT_PINITBUTTON_CUSTOMDESC</option>
             <option value="0">Off</option>
         </param>	
-        <param name="og-desc-custom" type="text"  default="" label="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_OGDESC" description="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_OGDESC_DESC"/>
+        <param name="og-desc-custom" type="text"  default="" label="PLG_CONTENT_PINITBUTTON_CUSTOM_OGDESC" description="PLG_CONTENT_PINITBUTTON_CUSTOM_OGDESC_DESC"/>
    </params>
    <!-- Standard plugin parameters for Joomla! 1.6+ -->
     <config>
         <fields name="params">
-            <fieldset name="settings" label="PLG_CONTENT_PINTERESTBUTTON_SETTINGS">
-                <field name="placement" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_PLACEMENT" description="PLG_CONTENT_PINTERESTBUTTON_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_BEFORE_CONTENT</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_AFTER_CONTENT</option>
-                    <option value="0">PLG_CONTENT_PINTERESTBUTTON_PLACEMENT_NONE</option>
+            <fieldset name="settings" label="PLG_CONTENT_PINITBUTTON_SETTINGS">
+                <field name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_PLACEMENT_BEFORE_CONTENT</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_PLACEMENT_AFTER_CONTENT</option>
+                    <option value="0">PLG_CONTENT_PINITBUTTON_PLACEMENT_NONE</option>
                 </field>
-                <field name="image" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_IMAGE" description="PLG_CONTENT_PINTERESTBUTTON_IMAGE_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_IMAGE_DEFAULT</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_IMAGE_BIG</option>
+                <field name="image" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_IMAGE" description="PLG_CONTENT_PINITBUTTON_IMAGE_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_IMAGE_DEFAULT</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_IMAGE_BIG</option>
                 </field>   
-                <field name="pincount" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_PINCOUNT" description="PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_HORISONTAL</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_PINCOUNT_VERTICAL</option>
-                    <option value="0">PLG_CONTENT_PINTERESTBUTTON_NO_COUNT</option>
+                <field name="pincount" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PINCOUNT" description="PLG_CONTENT_PINITBUTTON_PINCOUNT_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_PINCOUNT_HORISONTAL</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_PINCOUNT_VERTICAL</option>
+                    <option value="0">PLG_CONTENT_PINITBUTTON_NO_COUNT</option>
                 </field>
-                <field type="spacer" default="PLG_CONTENT_PINTERESTBUTTON_SPACER"/>
-                <field type="spacer" label="PLG_CONTENT_PINTERESTBUTTON_OG_IMAGE_PRIO" hr="true" />
-                <field name="og-img-prio1" type="list" default="2" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO1" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO1_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_INTRO_IMAGE</option>
-                    <option value="3">PLG_CONTENT_PINTERESTBUTTON_FULL_ARTICLE_IMAGE</option>
-                    <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-                    <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+                <field type="spacer" default="PLG_CONTENT_PINITBUTTON_SPACER"/>
+                <field type="spacer" label="PLG_CONTENT_PINITBUTTON_OG_IMAGE_PRIO" hr="true" />
+                <field name="og-img-prio1" type="list" default="2" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO1" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO1_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_INTRO_IMAGE</option>
+                    <option value="3">PLG_CONTENT_PINITBUTTON_FULL_ARTICLE_IMAGE</option>
+                    <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+                    <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
                     <option value="0">Off</option>
                 </field>
-                <field name="og-img-prio2" type="list" default="3" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO2" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO2_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_INTRO_IMAGE</option>
-                    <option value="3">PLG_CONTENT_PINTERESTBUTTON_FULL_ARTICLE_IMAGE</option>
-                    <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-                    <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+                <field name="og-img-prio2" type="list" default="3" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO2" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO2_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_INTRO_IMAGE</option>
+                    <option value="3">PLG_CONTENT_PINITBUTTON_FULL_ARTICLE_IMAGE</option>
+                    <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+                    <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
                     <option value="0">Off</option>
                 </field>
-                <field name="og-img-prio3" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINTERESTBUTTON_OGIMGPRIO3_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_FIRST_IMAGE_FOUND</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_INTRO_IMAGE</option>
-                    <option value="3">PLG_CONTENT_PINTERESTBUTTON_FULL_ARTICLE_IMAGE</option>
-                    <option value="4">PLG_CONTENT_PINTERESTBUTTON_IMAGE_WITH_CLASS</option>
-                    <option value="5">PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMAGE</option>
+                <field name="og-img-prio3" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_INTRO_IMAGE</option>
+                    <option value="3">PLG_CONTENT_PINITBUTTON_FULL_ARTICLE_IMAGE</option>
+                    <option value="4">PLG_CONTENT_PINITBUTTON_IMAGE_WITH_CLASS</option>
+                    <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
                     <option value="0">Off</option>
                 </field>
-                <field name="og-img-class" type="text" default="pinitimage" label="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_IMG_CLASS_DESC"/>
-                <field name="og-img-custom" type="imagelist" directory="images" default="" label="PLG_CONTENT_PINTERESTBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINTERESTBUTTON_SELECT_IMAGE_DESC"/>
-                <field type="spacer" label="PLG_CONTENT_PINTERESTBUTTON_DESC_SPACER" hr="true" />
-                <field name="og-desc" type="list" default="1" label="PLG_CONTENT_PINTERESTBUTTON_OGDESC" description="PLG_CONTENT_PINTERESTBUTTON_OGDESC_DESC">
-                    <option value="1">PLG_CONTENT_PINTERESTBUTTON_ARTICLE_METADESC</option>
-                    <option value="2">PLG_CONTENT_PINTERESTBUTTON_ARTICLE_INTROTEXT</option>
-                    <option value="3">PLG_CONTENT_PINTERESTBUTTON_SITE_DESC</option>
-                    <option value="4">PLG_CONTENT_PINTERESTBUTTON_CUSTOMDESC</option>
+                <field name="og-img-class" type="text" default="pinitimage" label="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS_DESC"/>
+                <field name="og-img-custom" type="imagelist" directory="images" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
+                <field type="spacer" label="PLG_CONTENT_PINITBUTTON_DESC_SPACER" hr="true" />
+                <field name="og-desc" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGDESC" description="PLG_CONTENT_PINITBUTTON_OGDESC_DESC">
+                    <option value="1">PLG_CONTENT_PINITBUTTON_ARTICLE_METADESC</option>
+                    <option value="2">PLG_CONTENT_PINITBUTTON_ARTICLE_INTROTEXT</option>
+                    <option value="3">PLG_CONTENT_PINITBUTTON_SITE_DESC</option>
+                    <option value="4">PLG_CONTENT_PINITBUTTON_CUSTOMDESC</option>
                     <option value="0">Off</option>
                 </field>	
-                <field name="og-desc-custom" type="text"  default="" label="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_OGDESC" description="PLG_CONTENT_PINTERESTBUTTON_CUSTOM_OGDESC_DESC"/>
+                <field name="og-desc-custom" type="text"  default="" label="PLG_CONTENT_PINITBUTTON_CUSTOM_OGDESC" description="PLG_CONTENT_PINITBUTTON_CUSTOM_OGDESC_DESC"/>
             </fieldset>
         </fields>
     </config>
     <administration>
         <languages folder="language">
-            <language tag="en-GB">en-GB.PLG_CONTENT_pinterestbutton.ini</language>
-            <language tag="sv-SE">sv-SE.PLG_CONTENT_pinterestbutton.ini</language>
+            <language tag="en-GB">en-GB.plg_content_pinitbutton.ini</language>
+            <language tag="sv-SE">sv-SE.plg_content_pinitbutton.ini</language>
         </languages>
     </administration>
 </install> 

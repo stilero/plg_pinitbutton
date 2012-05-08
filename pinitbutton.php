@@ -39,7 +39,9 @@ jimport('joomla.plugin.plugin');
 class plgContentPinitbutton extends JPlugin {
 
    var $config;
+   var $classNames;
     var $Article;
+    var $debug;
 
     function plgContentPinitbutton(&$subject, $config) {
         parent::__construct($subject, $config);
@@ -47,99 +49,69 @@ class plgContentPinitbutton extends JPlugin {
         $language->load('plg_content_pinitbutton', JPATH_ADMINISTRATOR, 'en-GB', true);
         $language->load('plg_content_pinitbutton', JPATH_ADMINISTRATOR, null, true);
         $this->errorOccured = FALSE;
-        $this->config = array(
-            'key' => 'value',
+        $this->classNames = array(
+            'com_article'       =>  'jArticle',
+            'com_content'       =>  'jArticle',
+            'com_k2'            =>  'k2Article',
+            'com_zoo'           =>  'zooArticle',
+            'com_virtuemart'    =>  'vmArticle'
         );
+        $this->debug = FALSE;
+        
     }
 
      // ---------- Joomla 1.6+ methods ------------------
-
-    /**
-     * Method is called by the view and the results are imploded and displayed in a placeholder
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    content object. Note $article->text is also available
-     * @var object  $params     content params
-     * @var integer $limitstart The 'page' number
-     * @return String
-     * @since 1.6
-     */
+    public function onContentPrepare($context, &$article, &$params, $limitstart=0) {
+        $component = JRequest::getVar('option');
+        if(array_key_exists($component, $this->classNames)){
+            $className = $this->classNames[$component];
+            JLoader::register( $className, dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+            if($context!='com_content.article' || $context != 'com_content.category'){
+                return;
+            }
+            $articleFactory = new $className($article);
+            $this->Article = $articleFactory->getArticleObj();
+            if($this->debug){
+                JError::raiseNotice('0', 'Context; '.$context);
+                JError::raiseNotice('0', 'Class; '.$className);
+                //JError::raiseNotice('0', var_dump($this->Article));
+            }
+            $this->insertButtonScriptDeclaration();
+            $regex = '/{pinitbtn}/i';
+            preg_replace($regex, $this->buttonScript(), $article->text);
+        }
+    }
+    
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
         if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
             return '';
         }
+        if($this->debug) JError::raiseNotice('0', 'OnContentAfterDisplay');
         return $this->buttonScript();
     }
 
-    /**
-     * Method is called by the view and the results are imploded and displayed in a placeholder
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    content object. Note $article->text is also available
-     * @var object  $params     content params
-     * @var integer $limitstart The 'page' number
-     * @return String
-     * @since 1.6
-     */
     public function onContentBeforeDisplay($context, &$article, &$params, $limitstart=0) {
         if($this->params->def('placement')!='1' || !$this->isArticleContext() ){
             return '';
         }
+        if($this->debug) JError::raiseNotice('0', 'OnContentBeforeDisplay');
         return $this->buttonScript();
     }
 
-    /**
-     * Method is called by the view
-     *
-     * @var string  $context    The context of the content passed to the plugin
-     * @var object  $article    content object. Note $article->text is also available
-     * @var object  $params     content params
-     * @var integer $limitstart The 'page' number
-     * @return void
-     * @since 1.6
-     */
-    public function onContentPrepare($context, &$article, &$params, $limitstart=0) {
-        JLoader::register( 'jArticle', dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
-        if($context!='com_content.article'){
-            return;
-        }
-        $articleFactory = new jArticle($article);
-        $this->Article = $articleFactory->getArticleObj();
-        $this->insertButtonScriptDeclaration();
-        $regex = '/{pinitbtn}/i';
-        preg_replace($regex, $this->buttonScript(), $article->text);
-    }
-
     // ---------- Joomla 1.5 methods ------------------
-
-    /**
-     * The first stage in preparing content for output and is the most common point for content orientated plugins to do their work.
-     *
-     * @var object  $article    A reference to the article that is being rendered by the view.
-     * @var array   $params     A reference to an associative array of relevant parameters.
-     * @var integer $limitstart An integer that determines the "page" of the content that is to be generated.
-     * @return void
-     * @since 1.5
-     */
     public function onPrepareContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
-        JLoader::register( 'jArticle', dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
-        $articleFactory = new jArticle($article);
-        $this->Article = $articleFactory->getArticleObj();
+        if(!$this->loadClasses($article)){
+            return;
+        }
+//        JLoader::register( 'jArticle', dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+//        $articleFactory = new jArticle($article);
+//        $this->Article = $articleFactory->getArticleObj();
         $this->insertButtonScriptDeclaration();
         $regex = '/{pinitbtn}/i';
         preg_replace($regex, $this->buttonScript(), $article->text);
     }
 
-    /**
-     * This is a request for information that should be placed immediately before the generated content.
-     *
-     * @var object  $article    A reference to the article that is being rendered by the view.
-     * @var array   $params     A reference to an associative array of relevant parameters.
-     * @var integer $limitstart An integer that determines the "page" of the content that is to be generated.
-     * @return string           Returned value from this event will be displayed in a placeholder.
-     * @since 1.5
-     */
     public function onBeforeDisplayContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
         if( $this->params->def('placement')!='1' || !$this->isArticleContext() ){
@@ -147,16 +119,7 @@ class plgContentPinitbutton extends JPlugin {
         }
         return $this->buttonScript();
     }
-
-    /**
-     * This is a request for information that should be placed immediately after the generated content.
-     *
-     * @var object  $article    A reference to the article that is being rendered by the view.
-     * @var array   $params     A reference to an associative array of relevant parameters.
-     * @var integer $limitstart An integer that determines the "page" of the content that is to be generated.
-     * @return string           Returned value from this event will be displayed in a placeholder.
-     * @since 1.5
-     */
+    
     public function onAfterDisplayContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
         if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
@@ -165,9 +128,31 @@ class plgContentPinitbutton extends JPlugin {
         return $this->buttonScript();
     }
     
+    // ---------------- K2 Methods ------------------------
+    public function onK2AfterDisplayContent(& $item, &$params, $limitstart=0){
+       return '';
+   }
+   
+   //------------------ Custom methods ---------------------
+   private function loadClasses($article){
+       $component = JRequest::getVar('option');
+        if(array_key_exists($component, $this->classNames)){
+            $className = $this->classNames[$component];
+            JLoader::register( $className, dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+            $articleFactory = new $className($article);
+            $this->Article = $articleFactory->getArticleObj();
+            if($this->debug == true){
+                JError::raiseNotice('0', 'Class; '.$className);
+                JError::raiseNotice('0', var_dump($this->Article));
+            }
+            return TRUE;
+        }
+        return false;
+   }
+   
     private function isArticleContext(){
         $articleID = JRequest::getVar('id');
-        $isArticle = isset ($articleID) ? true : false;
+        $isArticle = $articleID != '' ? true : false;
         return $isArticle;
     }
     
@@ -212,7 +197,8 @@ class plgContentPinitbutton extends JPlugin {
         $desc = htmlentities($this->description());
         $buttonImg = $this->buttonImage();
         $layout = $this->layoutAsAttr();
-        $buttonScript = '<a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a>';
+        $buttonScript = '<div class="pinitButton"><a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a></div>';
+        //if($this->debug) JError::raiseNotice('0', htmlentities ($buttonScript));
         return $buttonScript;
     }
     
@@ -222,18 +208,23 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     private function description(){
-        $desc = '';
+        $desc = $this->Article->description != '' ? $this->Article->description : $desc;
+         if($this->debug){
+                JError::raiseNotice('0', 'desc: '. $desc);
+         }
         switch ($this->params->def('og-desc')) {
             case 1:
-                $desc = htmlentities(strip_tags($this->Article->metadesc));
+                $metadesc = htmlentities(strip_tags($this->Article->metadesc));
+                $desc = $metadesc == '' ? $desc : $metadesc ;
                 break;
             case 2:
-                $desc = htmlentities(strip_tags($this->Article->introtext));
+                $introtext = htmlentities(strip_tags($this->Article->introtext));
+                $desc = $introtext == '' ? $this->Article->description : $introtext ;
                 break;
             case 3:
                 $joomlaConfig = JFactory::getConfig();
-                $joomlaSiteName = $joomlaConfig->getValue( 'config.MetaDesc' );
-                $desc = htmlentities(strip_tags($joomlaSiteName));
+                $joomlaSiteDesc = htmlentities(strip_tags($joomlaConfig->getValue( 'config.MetaDesc' )));
+                $desc = $joomlaSiteDesc == '' ? $desc : $joomlaSiteDesc ;
                 break;
             case 4:
                 $desc = htmlentities(strip_tags($this->params->def('og-desc-custom')));
@@ -253,13 +244,20 @@ class plgContentPinitbutton extends JPlugin {
         if($image == "" ){
             $image = $this->image($this->params->def('og-img-prio3'));
         }
+        if($image == "" ){
+            $image = $this->image($this->Article->image);
+        }
         if($image != ""){
             return htmlentities(strip_tags($image));
         }
     }
     
     private function image($option){
-        $image = '';
+        $image = $this->Article->image;
+        if($this->debug){
+            JError::raiseNotice('0', 'image; '.$image);
+            JError::raiseNotice('0', 'article; '.  var_dump($this->Article));
+        }
         switch ($option) {
             case 1:
                 $image = (isset($this->Article->firstContentImage)) ? $this->Article->firstContentImage : '';
