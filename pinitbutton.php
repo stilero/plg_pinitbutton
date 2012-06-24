@@ -192,9 +192,9 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     private function buttonScript(){
-        $url = htmlentities($this->Article->url);
-        $imageurl = htmlentities($this->findBestImage());
-        $desc = htmlentities($this->description());
+        $url = urlencode($this->Article->url);
+        $imageurl = urlencode($this->findBestImage());
+        $desc = urlencode($this->description());
         $buttonImg = $this->buttonImage();
         $layout = $this->layoutAsAttr();
         $buttonScript = '<div class="pinitButton"><a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a></div>';
