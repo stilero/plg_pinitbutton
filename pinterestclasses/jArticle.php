@@ -1,9 +1,9 @@
 <?php
 
 /**
- * A factory class for making standard object from Joomla articles
+ * A factory class for making standard object from Joomla articles.
  * 
- * $Id$
+ * $Id: jArticle.php 15 2012-07-02 07:12:44Z webbochsant@gmail.com $
  * @author Daniel Eliasson <joomla at stilero.com>
  * @license	GPLv3
  * 
@@ -33,14 +33,14 @@ class jArticle {
     
     public function __construct($article) {
         $tempClass = new stdClass();
-        foreach ($article as $property => &$value) {
-            $tempClass->$property = value;
+        foreach ($article as $property => $value) {
+            $tempClass->$property = $value;
             //unset($object->$property);
         }
         //unset($value);
         //$object = (unset)$object;
         $tempClass->jVersion = $this->jVersion();
-        $tempClass->category_title = $this->categoryTitle($article);
+        $tempClass->category_title = ($tempClass->jVersion == '1.5') ? $tempClass->category : $tempClass->category_title;
         $tempClass->description = $this->description($article);
         $tempClass->isPublished = $this->isPublished($article);
         $tempClass->isPublic = $this->isPublic($article);
@@ -74,9 +74,6 @@ class jArticle {
             $image = $this->fullTextImage($article);
         }
         if ($image == '' ){
-            $image = $this->fullTextImage($article);
-        }
-        if ($image == '' ){
             $image = $this->firstImageInContent($article);
         }
         return $image;
@@ -84,7 +81,6 @@ class jArticle {
     
     public function imagesInContent($article){
         $content = $article->text;
-        //var_dump($content);exit;
         if( ($content == '') || (!class_exists('DOMDocument')) ){
             return;
         }
@@ -142,12 +138,16 @@ class jArticle {
     }
     
     public function description($article){
-        $description = isset($article->text) ? substr(htmlentities(strip_tags($article->text)), 0, 150) : '';
-        if($article->introtext != ''){
-            $description = htmlentities(strip_tags($article->introtext));
-        }elseif ($article->metadesc != '') {
-            $description = htmlentities(strip_tags($article->metadesc));
+        $descText = $article->text!="" ? $article->text : '';
+        $description = $article->text!="" ? $article->text : '';
+        if(isset($article->introtext) && $article->introtext!=""){
+            $descText = $article->introtext;
+        }elseif (isset($article->metadesc) && $article->metadesc!="" ) {
+            $descText = $article->metadesc;
         }
+        $descNeedles = array("\n", "\r", "\"", "'");
+        str_replace($descNeedles, " ", $description );
+        $description = substr(htmlspecialchars( strip_tags($descText), ENT_COMPAT, 'UTF-8'), 0, 250);
         return $description;
     }
     
@@ -161,15 +161,91 @@ class jArticle {
            $tagsArray[] = trim(str_replace(" ", "", $value));
        }
        return $tagsArray;
+    } 
+    
+    private function _joomlaSefUrlFromRoute($article){
+        require_once(JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
+        $siteURL = substr(JURI::root(), 0, -1);
+        if(JPATH_BASE == JPATH_ADMINISTRATOR) {
+            // In the back end we need to set the application to the site app instead
+            JFactory::$application = JApplication::getInstance('site');
+        }
+        $catAlias = $this->categoryAlias($article);
+        $articleSlug = $this->articleSlug($article);
+        $catSlug = $article->catid.':'.$catAlias;
+        $isSh404SefExtensionEnabled = JComponentHelper::isEnabled('com_sh404sef', true);
+        if($isSh404SefExtensionEnabled && JPATH_BASE == JPATH_ADMINISTRATOR){
+            $this->_initSh404SefUrls();
+        }
+        $articleRoute = JRoute::_( ContentHelperRoute::getArticleRoute($articleSlug, $catSlug) );
+        $sefURI = str_replace(JURI::base(true), '', $articleRoute);
+        if(JPATH_BASE == JPATH_ADMINISTRATOR) {
+            $siteURL = str_replace($siteURL.DS.'administrator', '', $siteURL);
+            JFactory::$application = JApplication::getInstance('administrator');
+        }
+        $sefURL = $siteURL.$sefURI;
+        return $sefURL;
+    }
+    private function _initSh404SefUrls(){
+        $app = &JFactory::getApplication();
+        require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_sh404sef'.DS.'sh404sef.class.php');
+        $sefConfig = & Sh404sefFactory::getConfig();
+
+        // hook to be able to install other SEF extension plugins
+        Sh404sefHelperExtplugins::loadInstallAdapters();
+
+        // another hook to allow other SEF extensions language file to be loaded
+        Sh404sefHelperExtplugins::loadLanguageFiles();
+
+        if (!$sefConfig->Enabled) {
+            // go away if not enabled
+            return;
+        }
+        $joomlaRouter = $app->getRouter();
+        $pageInfo = & Sh404sefFactory::getPageInfo();
+        $pageInfo->router = new Sh404sefClassRouter();
+        $joomlaRouter->attachParseRule( array( $pageInfo->router, 'parseRule'));
+        $joomlaRouter->attachBuildRule( array( $pageInfo->router, 'buildRule'));
+    }
+   
+    public function url($article){
+        return $this->_joomlaSefUrlFromRoute($article);
     }
     
-    public function url($article){
-        $catid = isset($article->catslug) ? '&catid='.$article->catslug : '';
-        $articleID = isset($article->slug) ? '&id=' . $article->slug : '';
-        $url = JRoute::_( 'index.php?view=article' . $catid . $articleID);
-        $parsedRootURL = parse_url(JURI::root());
-        $fullUrl = preg_match('/http/', $url)? $url :  $parsedRootURL['scheme'].'://'.$parsedRootURL['host']. $url;
-        return $fullUrl;
+    private function articleSlug($article){
+        $slug = $article->id.':'.$this->articleAlias($article);
+        return $slug;
+    }
+    
+    private function articleAlias($article){
+        jimport( 'joomla.filter.output' );
+        $alias = $article->alias;
+        if(empty($alias)) {
+            $db =& JFactory::getDBO();
+            $query = 
+                'SELECT a.alias FROM '
+                .$db->nameQuote('#__content').' AS '.$db->nameQuote('a').
+                ' WHERE a.id='.$db->quote($article->id);
+            $db->setQuery($query);
+            $result = $db->loadObject();
+            $alias = empty($result->alias) ? $article->title : $result->alias;
+        }
+        $alias = JFilterOutput::stringURLSafe($alias);
+        return $alias;
+    }
+    
+    private function categoryAlias($article){
+        jimport( 'joomla.filter.output' );
+        $db =& JFactory::getDBO();
+        $query = 
+            'SELECT c.alias FROM '
+            .$db->nameQuote('#__categories').' AS '.$db->nameQuote('c').
+            ' WHERE c.id='.$db->quote($article->catid);
+        $db->setQuery($query);
+        $result = $db->loadObject();
+        $alias = $result->alias;
+        $alias = JFilterOutput::stringURLSafe($alias);
+        return $alias;
     }
     
     public function isPublic($article){
@@ -208,7 +284,7 @@ class jArticle {
         $currentDate = $date->toMySQL();
         if ( ($publishUp > $currentDate) ){
             return FALSE;
-        }else if($publishDown < $currentDate && $publishDown != '0000-00-00 00:00:00'){
+        }else if($publishDown < $currentDate && $publishDown != '0000-00-00 00:00:00' && $publishDown!=""){
             return FALSE;
         }else {
             return TRUE;

@@ -16,7 +16,6 @@
     </files>
     <languages folder="language">
         <language tag="en-GB">en-GB.plg_content_pinitbutton.ini</language>
-        <language tag="sv-SE">sv-SE.plg_content_pinitbutton.ini</language>
     </languages>
     <!-- Standard plugin parameters for Joomla! 1.5 -->   
     <params>
@@ -125,7 +124,7 @@
     <administration>
         <languages folder="language">
             <language tag="en-GB">en-GB.plg_content_pinitbutton.ini</language>
-            <language tag="sv-SE">sv-SE.plg_content_pinitbutton.ini</language>
+            <language tag="en-GB">en-GB.plg_content_pinitbutton.sys.ini</language>
         </languages>
     </administration>
 </install> 
