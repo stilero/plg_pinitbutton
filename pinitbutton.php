@@ -62,13 +62,14 @@ class plgContentPinitbutton extends JPlugin {
 
      // ---------- Joomla 1.6+ methods ------------------
     public function onContentPrepare($context, &$article, &$params, $limitstart=0) {
+        if($context != 'com_content.article'){
+                return;
+        }
         $component = JRequest::getVar('option');
         if(array_key_exists($component, $this->classNames)){
             $className = $this->classNames[$component];
             JLoader::register( $className, dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
-            if($context!='com_content.article' || $context != 'com_content.category'){
-                return;
-            }
+            
             $articleFactory = new $className($article);
             $this->Article = $articleFactory->getArticleObj();
             if($this->debug){
@@ -83,6 +84,9 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
+        if(JRequest::getVar('option')!='com_content' || JRequest::getVar('view')!='article'){
+            return;
+        }
         if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
             return '';
         }
@@ -91,6 +95,9 @@ class plgContentPinitbutton extends JPlugin {
     }
 
     public function onContentBeforeDisplay($context, &$article, &$params, $limitstart=0) {
+        if(JRequest::getVar('option')!='com_content' || JRequest::getVar('view')!='article'){
+            return;
+        }
         if($this->params->def('placement')!='1' || !$this->isArticleContext() ){
             return '';
         }
@@ -101,6 +108,9 @@ class plgContentPinitbutton extends JPlugin {
     // ---------- Joomla 1.5 methods ------------------
     public function onPrepareContent(&$article, &$params, $limitstart=0) {
         global $mainframe;
+        if(JRequest::getVar('option')!='com_content' || JRequest::getVar('view')!='article'){
+            return;
+        }
         if(!$this->loadClasses($article)){
             return;
         }
@@ -113,6 +123,9 @@ class plgContentPinitbutton extends JPlugin {
     }
 
     public function onBeforeDisplayContent(&$article, &$params, $limitstart=0) {
+        if(JRequest::getVar('option')!='com_content' || JRequest::getVar('view')!='article'){
+            return;
+        }
         global $mainframe;
         if( $this->params->def('placement')!='1' || !$this->isArticleContext() ){
             return '';
@@ -121,6 +134,9 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     public function onAfterDisplayContent(&$article, &$params, $limitstart=0) {
+        if(JRequest::getVar('option')!='com_content' || JRequest::getVar('view')!='article'){
+            return;
+        }
         global $mainframe;
         if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
             return '';
@@ -130,7 +146,63 @@ class plgContentPinitbutton extends JPlugin {
     
     // ---------------- K2 Methods ------------------------
     public function onK2AfterDisplayContent(& $item, &$params, $limitstart=0){
-       return '';
+       if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
+            return;
+        }
+        if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
+            return '';
+        }
+        if(!$this->loadClasses($item)){
+            return;
+        }
+        $component = JRequest::getVar('option');
+        if(array_key_exists($component, $this->classNames)){
+            $className = $this->classNames[$component];
+            JLoader::register( $className, dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+            
+            $articleFactory = new $className($item);
+            $this->Article = $articleFactory->getArticleObj();
+            if($this->debug){
+                JError::raiseNotice('0', 'Context; '.$context);
+                JError::raiseNotice('0', 'Class; '.$className);
+                //JError::raiseNotice('0', var_dump($this->Article));
+            }
+            $this->insertButtonScriptDeclaration();
+            $regex = '/{pinitbtn}/i';
+            preg_replace($regex, $this->buttonScript(), $article->text);
+        }
+        JError::raiseNotice('0', 'url: '.$this->Article->url);
+        return $this->buttonScript();
+   }
+   
+   public function onK2BeforeDisplayContent(& $item, &$params, $limitstart=0){
+       if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
+            return;
+        }
+        if($this->params->def('placement')!='1' || !$this->isArticleContext() ){
+            return '';
+        }
+        if(!$this->loadClasses($item)){
+            return;
+        }
+        $component = JRequest::getVar('option');
+        if(array_key_exists($component, $this->classNames)){
+            $className = $this->classNames[$component];
+            JLoader::register( $className, dirname(__FILE__).DS.'pinterestclasses'.DS.'jArticle.php');
+            
+            $articleFactory = new $className($item);
+            $this->Article = $articleFactory->getArticleObj();
+            if($this->debug){
+                JError::raiseNotice('0', 'Context; '.$context);
+                JError::raiseNotice('0', 'Class; '.$className);
+                //JError::raiseNotice('0', var_dump($this->Article));
+            }
+            $this->insertButtonScriptDeclaration();
+            $regex = '/{pinitbtn}/i';
+            preg_replace($regex, $this->buttonScript(), $article->text);
+        }
+        JError::raiseNotice('0', 'url: '.$this->Article->url);
+        return $this->buttonScript();
    }
    
    //------------------ Custom methods ---------------------
