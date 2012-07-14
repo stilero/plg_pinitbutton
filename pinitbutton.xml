@@ -19,7 +19,7 @@
     </languages>
     <!-- Standard plugin parameters for Joomla! 1.5 -->   
     <params>
-        <param name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_DESC">
+        <param name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_PLACEMENT_DESC">
             <option value="1">PLG_CONTENT_PINITBUTTON_PLACEMENT_BEFORE_CONTENT</option>
             <option value="2">PLG_CONTENT_PINITBUTTON_PLACEMENT_AFTER_CONTENT</option>
             <option value="0">PLG_CONTENT_PINITBUTTON_PLACEMENT_NONE</option>
@@ -53,7 +53,7 @@
             <option value="0">Off</option>
         </param>
         <param name="og-img-class" type="text"  default="pinitimage" label="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS_DESC"/>
-        <param name="og-img-custom" type="imagelist" directory="images/stories" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
+        <param name="og-img-custom" type="imagelist" hide_default="true" directory="images/stories" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
         <param name="og-desc" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGDESC" description="PLG_CONTENT_PINITBUTTON_OGDESC_DESC">
             <option value="1">PLG_CONTENT_PINITBUTTON_ARTICLE_METADESC</option>
             <option value="2">PLG_CONTENT_PINITBUTTON_ARTICLE_INTROTEXT</option>
@@ -67,7 +67,7 @@
     <config>
         <fields name="params">
             <fieldset name="settings" label="PLG_CONTENT_PINITBUTTON_SETTINGS">
-                <field name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_DESC">
+                <field name="placement" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_PLACEMENT" description="PLG_CONTENT_PINITBUTTON_PLACEMENT_DESC">
                     <option value="1">PLG_CONTENT_PINITBUTTON_PLACEMENT_BEFORE_CONTENT</option>
                     <option value="2">PLG_CONTENT_PINITBUTTON_PLACEMENT_AFTER_CONTENT</option>
                     <option value="0">PLG_CONTENT_PINITBUTTON_PLACEMENT_NONE</option>
@@ -99,7 +99,7 @@
                     <option value="5">PLG_CONTENT_PINITBUTTON_CUSTOM_IMAGE</option>
                     <option value="0">Off</option>
                 </field>
-                <field name="og-img-prio3" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3_DESC">
+                <field name="og-img-prio3" type="list" default="5" label="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3" description="PLG_CONTENT_PINITBUTTON_OGIMGPRIO3_DESC">
                     <option value="1">PLG_CONTENT_PINITBUTTON_FIRST_IMAGE_FOUND</option>
                     <option value="2">PLG_CONTENT_PINITBUTTON_INTRO_IMAGE</option>
                     <option value="3">PLG_CONTENT_PINITBUTTON_FULL_ARTICLE_IMAGE</option>
@@ -108,7 +108,7 @@
                     <option value="0">Off</option>
                 </field>
                 <field name="og-img-class" type="text" default="pinitimage" label="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS_DESC"/>
-                <field name="og-img-custom" type="imagelist" directory="images" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
+                <field name="og-img-custom" type="imagelist" hide_default="true" directory="images" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
                 <field type="spacer" label="PLG_CONTENT_PINITBUTTON_DESC_SPACER" hr="true" />
                 <field name="og-desc" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGDESC" description="PLG_CONTENT_PINITBUTTON_OGDESC_DESC">
                     <option value="1">PLG_CONTENT_PINITBUTTON_ARTICLE_METADESC</option>
