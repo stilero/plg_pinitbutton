@@ -6,7 +6,7 @@
     <copyright>Copyright (c) 2012-apr-27 Stilero Webdesign http://www.stilero.com. All rights reserved.</copyright>
     <authorEmail>joomla@stilero.com</authorEmail>
     <authorUrl>www.stilero.com</authorUrl>
-    <version>1.0</version>
+    <version>1.1</version>
     <license>GPLv2</license>
     <description>Adds a Pinterest button to your website</description>
     <files>
@@ -53,7 +53,7 @@
             <option value="0">Off</option>
         </param>
         <param name="og-img-class" type="text"  default="pinitimage" label="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS" description="PLG_CONTENT_PINITBUTTON_CUSTOM_IMG_CLASS_DESC"/>
-        <param name="og-img-custom" type="imagelist" hide_default="true" directory="images/stories" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
+        <param name="og-img-custom" type="imagelist" hide_default="true" directory="images" default="" label="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE" description="PLG_CONTENT_PINITBUTTON_SELECT_IMAGE_DESC"/>
         <param name="og-desc" type="list" default="1" label="PLG_CONTENT_PINITBUTTON_OGDESC" description="PLG_CONTENT_PINITBUTTON_OGDESC_DESC">
             <option value="1">PLG_CONTENT_PINITBUTTON_ARTICLE_METADESC</option>
             <option value="2">PLG_CONTENT_PINITBUTTON_ARTICLE_INTROTEXT</option>
