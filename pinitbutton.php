@@ -75,6 +75,7 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
+
         if( $context != 'com_content.article' && $context !='com_virtuemart.productdetails'){
             return;
         }
@@ -182,9 +183,13 @@ class plgContentPinitbutton extends JPlugin {
    }
    
     private function isArticleContext(){
-        $articleID = JRequest::getVar('id');
-        $isArticle = $articleID != '' ? true : false;
-        return $isArticle;
+        $isArticleView = JRequest::getVar('view') == 'article' ? true : false;
+        $hasArticleID = JRequest::getVar('id') != '' ? true : false;
+        if($isArticleView && $hasArticleID){
+            return true;
+        }else{
+            return false;
+        }
     }
     
     private function isProductContext(){

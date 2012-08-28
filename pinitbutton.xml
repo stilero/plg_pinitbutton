@@ -2,11 +2,11 @@
 <install version="1.5" type="plugin" group="content" method="upgrade">
     <name>Content - PinitButton</name>
     <author>Daniel Eliasson (joomla at stilero.com)</author>
-    <creationDate>2012-apr-27</creationDate>
+    <creationDate>2012-aug-28</creationDate>
     <copyright>Copyright (c) 2012-apr-27 Stilero Webdesign http://www.stilero.com. All rights reserved.</copyright>
     <authorEmail>joomla@stilero.com</authorEmail>
     <authorUrl>www.stilero.com</authorUrl>
-    <version>1.1</version>
+    <version>1.2</version>
     <license>GPLv2</license>
     <description>Adds a Pinterest button to your website</description>
     <files>
