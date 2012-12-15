@@ -3,7 +3,7 @@
 /**
  * Description of PinitButton
  *
- * @version  1.0
+ * @version  1.3
  * @author Daniel Eliasson (joomla at stilero.com)
  * @copyright  (C) 2012-apr-27 Stilero Webdesign http://www.stilero.com
  * @category Plugins
@@ -50,11 +50,11 @@ class plgContentPinitbutton extends JPlugin {
         $language->load('plg_content_pinitbutton', JPATH_ADMINISTRATOR, null, true);
         $this->errorOccured = FALSE;
         $this->classNames = array(
-            'com_article'       =>  'jArticle',
-            'com_content'       =>  'jArticle',
-            'com_k2'            =>  'k2Article',
-            'com_zoo'           =>  'zooArticle',
-            'com_virtuemart'    =>  'vmArticle'
+            'com_article'       =>  'PinBtnJArticle',
+            'com_content'       =>  'PinBtnJArticle',
+            'com_k2'            =>  'PinBtnK2Article',
+            'com_zoo'           =>  'PinBtnZooArticle',
+            'com_virtuemart'    =>  'PinBtnVmArticle'
         );
         $this->debug = FALSE;
         
@@ -70,8 +70,23 @@ class plgContentPinitbutton extends JPlugin {
             return;
         }
         $this->insertButtonScriptDeclaration();
-        $regex = '/{pinitbtn}/i';
-        preg_replace($regex, $this->buttonScript(), $article->text);
+//        $regex = '/{pinitbtn}/i';
+//        preg_replace($regex, $this->buttonScript(), $article->text);
+        $article->text = $this->replaceWildcardInContent($article->text);
+    }
+    
+    public function onK2PrepareContent(&$item, &$params, $limitstart=0) {
+        if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
+            return;
+        }
+
+        if(!$this->loadClasses($item)){
+            return;
+        }
+        $this->insertButtonScriptDeclaration();
+//        $regex = '/{pinitbtn}/i';
+//        preg_replace($regex, $this->buttonScript(), $article->text);
+        $item->text = $this->replaceWildcardInContent($item->text);
     }
     
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
@@ -106,8 +121,9 @@ class plgContentPinitbutton extends JPlugin {
             return;
         }
         $this->insertButtonScriptDeclaration();
-        $regex = '/{pinitbtn}/i';
-        preg_replace($regex, $this->buttonScript(), $article->text);
+//        $regex = '/{pinitbtn}/i';
+//        preg_replace($regex, $this->buttonScript(), $article->text);
+        $article->text = $this->replaceWildcardInContent($article->text);
     }
 
     public function onBeforeDisplayContent(&$article, &$params, $limitstart=0) {
@@ -144,9 +160,9 @@ class plgContentPinitbutton extends JPlugin {
             return;
         }
         $this->insertButtonScriptDeclaration();
-        $regex = '/{pinitbtn}/i';
-        preg_replace($regex, $this->buttonScript(), $article->text);
-        return $this->buttonScript();
+//        $regex = '/{pinitbtn}/i';
+//        preg_replace($regex, $this->buttonScript(), $article->text);
+        return $item->text = $this->replaceWildcardInContent($item->text);
    }
    
    public function onK2BeforeDisplayContent(& $item, &$params, $limitstart=0){
@@ -160,9 +176,10 @@ class plgContentPinitbutton extends JPlugin {
             return;
         }
         $this->insertButtonScriptDeclaration();
-        $regex = '/{pinitbtn}/i';
-        preg_replace($regex, $this->buttonScript(), $article->text);
-        return $this->buttonScript();
+
+//        $regex = '/{pinitbtn}/i';
+//        preg_replace($regex, $this->buttonScript(), $article->text);
+        return $item->text = $this->replaceWildcardInContent($item->text);
    }
    
    //------------------ Custom methods ---------------------
@@ -352,6 +369,11 @@ class plgContentPinitbutton extends JPlugin {
                 return $image['src'];
             }
         }
+    }
+    
+    protected function replaceWildcardInContent($text){
+        $newText = str_replace('{pinitbtn}', $this->buttonScript(), $text);
+        return $newText;
     }
 
 }

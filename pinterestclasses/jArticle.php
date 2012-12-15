@@ -3,36 +3,16 @@
 /**
  * A factory class for making standard object from Joomla articles.
  * 
- * $Id: jArticle.php 16 2012-07-28 11:40:39Z webbochsant@gmail.com $
+ * @version = 1.1
  * @author Daniel Eliasson <joomla at stilero.com>
  * @license	GPLv3
- * 
- * Joomla! is free software. This version may have been modified pursuant
- * to the GNU General Public License, and as distributed it includes or
- * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
- * 
- * This file is part of jArticle.
- * 
- * jArticle is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * jArticle is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with jArticle.  If not, see <http://www.gnu.org/licenses/>.
  * 
  */
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-class jArticle {
+class PinBtnJArticle {
     var $articleObj;
     
     public function __construct($article) {
@@ -319,14 +299,17 @@ class jArticle {
 /**
  * For K2 items
  */
-class k2Article extends jArticle{
+class PinBtnK2Article extends PinBtnJArticle{
     public function __construct($article) {
         parent::__construct($article);
-        $tempClass->category_title = $this->categoryTitle($article);
+        //$tempClass->category_title = $this->categoryTitle($article);
     }
     
     public function categoryTitle($article){
-        $category_title = $article->category->name;
+        $category_title = '';
+        if(isset($article->category->name)){
+            $category_title = $article->category->name;
+        }
         return $category_title;
     }
     
@@ -344,7 +327,7 @@ class k2Article extends jArticle{
 /**
  * For Zoo articles
  */
-class zooArticle extends jArticle{
+class PinBtnZooArticle extends PinBtnJArticle{
     public function __construct($article) {
         parent::__construct($article);
     }
@@ -353,7 +336,7 @@ class zooArticle extends jArticle{
 /**
  * For VirtueMart
  */
-class vmArticle extends jArticle{
+class PinBtnVmArticle extends PinBtnJArticle{
     
     var $productImage;
     
