@@ -65,7 +65,9 @@ class plgContentPinitbutton extends JPlugin {
         if( $context != 'com_content.article' && $context !='com_virtuemart.productdetails'){
             return;
         }
-
+        if($this->params->def('placement')!='0' ){
+            return;
+        }
         if(!$this->loadClasses($article)){
             return;
         }
@@ -79,13 +81,13 @@ class plgContentPinitbutton extends JPlugin {
         if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
             return;
         }
-
+        if($this->params->def('placement')!='0' ){
+            return;
+        }
         if(!$this->loadClasses($item)){
             return;
         }
         $this->insertButtonScriptDeclaration();
-//        $regex = '/{pinitbtn}/i';
-//        preg_replace($regex, $this->buttonScript(), $article->text);
         $item->text = $this->replaceWildcardInContent($item->text);
     }
     
@@ -153,33 +155,28 @@ class plgContentPinitbutton extends JPlugin {
        if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
             return;
         }
-        if($this->params->def('placement')!='2' || !$this->isArticleContext() ){
-            return '';
+        if($this->params->def('placement')!='2' || !$this->isArticleContext(TRUE) ){
+            return;
         }
         if(!$this->loadClasses($item)){
             return;
         }
         $this->insertButtonScriptDeclaration();
-//        $regex = '/{pinitbtn}/i';
-//        preg_replace($regex, $this->buttonScript(), $article->text);
-        return $item->text = $this->replaceWildcardInContent($item->text);
+        return $this->buttonScript();
    }
    
    public function onK2BeforeDisplayContent(& $item, &$params, $limitstart=0){
        if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
             return;
         }
-        if($this->params->def('placement')!='1' || !$this->isArticleContext() ){
-            return '';
+        if($this->params->def('placement')!='1' || !$this->isArticleContext(TRUE) ){
+            return;
         }
         if(!$this->loadClasses($item)){
             return;
         }
         $this->insertButtonScriptDeclaration();
-
-//        $regex = '/{pinitbtn}/i';
-//        preg_replace($regex, $this->buttonScript(), $article->text);
-        return $item->text = $this->replaceWildcardInContent($item->text);
+        return $this->buttonScript();
    }
    
    //------------------ Custom methods ---------------------
@@ -199,8 +196,12 @@ class plgContentPinitbutton extends JPlugin {
         return false;
    }
    
-    private function isArticleContext(){
-        $isArticleView = JRequest::getVar('view') == 'article' ? true : false;
+    private function isArticleContext($isK2=false){
+        $viewName = 'article';
+        if($isK2){
+            $viewName = 'item';
+        }
+        $isArticleView = JRequest::getVar('view') == $viewName ? true : false;
         $hasArticleID = JRequest::getVar('id') != '' ? true : false;
         if($isArticleView && $hasArticleID){
             return true;
