@@ -3,7 +3,7 @@
 /**
  * Description of PinitButton
  *
- * @version  1.3
+ * @version  1.4
  * @author Daniel Eliasson (joomla at stilero.com)
  * @copyright  (C) 2012-apr-27 Stilero Webdesign http://www.stilero.com
  * @category Plugins
