@@ -3,7 +3,7 @@
 /**
  * Description of PinitButton
  *
- * @version  1.4
+ * @version  1.5
  * @author Daniel Eliasson (joomla at stilero.com)
  * @copyright  (C) 2012-apr-27 Stilero Webdesign http://www.stilero.com
  * @category Plugins
@@ -62,22 +62,26 @@ class plgContentPinitbutton extends JPlugin {
 
      // ---------- Joomla 1.6+ methods ------------------
     public function onContentPrepare($context, &$article, &$params, $limitstart=0) {
-        if( $context != 'com_content.article' && $context !='com_virtuemart.productdetails'){
+        $this->insertButtonScriptDeclaration();
+        $article->text = $this->replaceWildcardInContent($article->text);
+        if($this->params->def('placement')!='0' ){
             return;
         }
-        if($this->params->def('placement')!='0' ){
+        if( $context != 'com_content.article' && $context !='com_virtuemart.productdetails'){
             return;
         }
         if(!$this->loadClasses($article)){
             return;
         }
-        $this->insertButtonScriptDeclaration();
+        
 //        $regex = '/{pinitbtn}/i';
 //        preg_replace($regex, $this->buttonScript(), $article->text);
-        $article->text = $this->replaceWildcardInContent($article->text);
+        
     }
     
     public function onK2PrepareContent(&$item, &$params, $limitstart=0) {
+        $this->insertButtonScriptDeclaration();
+        $item->text = $this->replaceWildcardInContent($item->text);
         if(JRequest::getVar('option')!='com_k2' || JRequest::getVar('view')!='item'){
             return;
         }
@@ -87,8 +91,7 @@ class plgContentPinitbutton extends JPlugin {
         if(!$this->loadClasses($item)){
             return;
         }
-        $this->insertButtonScriptDeclaration();
-        $item->text = $this->replaceWildcardInContent($item->text);
+        
     }
     
     public function onContentAfterDisplay($context, &$article, &$params, $limitstart=0) {
@@ -115,6 +118,7 @@ class plgContentPinitbutton extends JPlugin {
 
     // ---------- Joomla 1.5 methods ------------------
     public function onPrepareContent(&$article, &$params, $limitstart=0) {
+        
         global $mainframe;
         if( $context != 'com_content.article' && $context !='com_virtuemart.productdetails'){
                 return;
@@ -123,9 +127,10 @@ class plgContentPinitbutton extends JPlugin {
             return;
         }
         $this->insertButtonScriptDeclaration();
+        $article->text = $this->replaceWildcardInContent($article->text);
 //        $regex = '/{pinitbtn}/i';
 //        preg_replace($regex, $this->buttonScript(), $article->text);
-        $article->text = $this->replaceWildcardInContent($article->text);
+        
     }
 
     public function onBeforeDisplayContent(&$article, &$params, $limitstart=0) {
@@ -260,7 +265,7 @@ class plgContentPinitbutton extends JPlugin {
         $desc = urlencode($this->description());
         $buttonImg = $this->buttonImage();
         $layout = $this->layoutAsAttr();
-        $buttonScript = '<div class="pinitButton"><a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a></div>';
+        $buttonScript = '<span class="pinitButton"><a href="http://pinterest.com/pin/create/button/?url='.$url.'&media='.$imageurl.'&description='.$desc.'" class="pin-it-button"'.$layout.'><img border="0" src="'.$buttonImg.'" title="Pin It" /></a></span>';
         //if($this->debug) JError::raiseNotice('0', htmlentities ($buttonScript));
         return $buttonScript;
     }
@@ -373,7 +378,8 @@ class plgContentPinitbutton extends JPlugin {
     }
     
     protected function replaceWildcardInContent($text){
-        $newText = str_replace('{pinitbtn}', $this->buttonScript(), $text);
+        $placeholder = $this->params->def('placeholder');
+        $newText = str_replace($placeholder, $this->buttonScript(), $text);
         return $newText;
     }
 
